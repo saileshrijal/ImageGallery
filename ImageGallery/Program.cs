@@ -1,3 +1,5 @@
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 using ImageGallery.Data;
 using ImageGallery.Models;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +15,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options=>options.Sig
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -20,7 +24,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
+app.UseNotyf();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
