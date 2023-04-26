@@ -19,14 +19,23 @@ namespace ImageGallery.Controllers
             _notfyService = notfyService;
         }
 
+        [HttpGet]
         public IActionResult Login()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         [HttpGet]
         public IActionResult Register()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -54,6 +63,27 @@ namespace ImageGallery.Controllers
             _notfyService.Success("Your registration successfull");
             return RedirectToAction(nameof(Login));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginVM vm)
+        {
+            if (!ModelState.IsValid) { return View(vm); }
+            var userByUserName = await _userManager.FindByNameAsync(vm.UserName!);
+            if(userByUserName == null)
+            {
+                _notfyService.Error("Username not exists");
+                return View(vm);
+            }
+            var verifyPassword = await _userManager.CheckPasswordAsync(userByUserName, vm.Password!);
+            if (!verifyPassword)
+            {
+                _notfyService.Error("Password does not match");
+                return View(vm);
+            }
+            await _signInManager.SignInAsync(userByUserName, vm.RemeberMe);
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
 
         private async Task<bool> CheckDuplicateEmail(string email)
         {
