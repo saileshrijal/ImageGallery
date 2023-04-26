@@ -84,6 +84,14 @@ namespace ImageGallery.Controllers
             return RedirectToAction(nameof(Index), "Home");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            _notfyService.Success("Logout successfull");
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
 
         private async Task<bool> CheckDuplicateEmail(string email)
         {
