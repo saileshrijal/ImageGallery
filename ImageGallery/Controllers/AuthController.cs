@@ -24,7 +24,7 @@ namespace ImageGallery.Controllers
         {
             if (_signInManager.IsSignedIn(User))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Image");
             }
             return View();
         }
@@ -34,7 +34,7 @@ namespace ImageGallery.Controllers
         {
             if (_signInManager.IsSignedIn(User))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Image");
             }
             return View();
         }
@@ -81,7 +81,7 @@ namespace ImageGallery.Controllers
                 return View(vm);
             }
             await _signInManager.SignInAsync(userByUserName, vm.RemeberMe);
-            return RedirectToAction(nameof(Index), "Home");
+            return RedirectToAction(nameof(Index), "Image");
         }
 
         [HttpPost]
